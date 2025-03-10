@@ -35,14 +35,18 @@ export function activate(context: vscode.ExtensionContext) {
 
           const genAI = new GoogleGenerativeAI(apiKey);
 
-          // Get the code context from the start of the document to the cursor.
-          const range = new vscode.Range(new vscode.Position(0, 0), position);
-          const contextText = document.getText(range);
+          // Get a configurable context: last N lines before the cursor (default to 50 lines)
+          const contextLineCount = config.get<number>("contextLineCount") ?? 50;
+          const startLine = Math.max(0, position.line - contextLineCount);
+          const contextRange = new vscode.Range(
+            new vscode.Position(startLine, 0),
+            position
+          );
+          const contextText = document.getText(contextRange);
           const language = document.languageId;
 
-          // Construct the prompt with clear instructions.
-          const prompt = `You are a top-notch programming assistant specializing in code auto-completion. Based on this ${language} code snippet and context, generate the most likely continuation that a skilled developer would write.
-
+          // Build an enhanced prompt that adapts to the user's coding style.
+          const prompt = `You are an expert code assistant specializing in inline completions. Based on the following ${language} code snippet, generate a concise continuation that completes only the currently unfinished expression. Follow these rules:
 					Rules:
 					1. Output ONLY pure code—no explanations, comments, or non-code text.
 					2. Complete ONLY the currently unfinished statement/expression.
@@ -61,6 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
             const model = genAI.getGenerativeModel({
               model: modelName,
               generationConfig: {
+                // About 50 tokens should roughly equal 150 characters.
                 maxOutputTokens: 50,
               },
             });
