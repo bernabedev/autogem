@@ -1,0 +1,68 @@
+{
+  "name": "autogem",
+  "displayName": "AutoGem",
+  "description": "GemAuto: AI-Powered Code Autocompletion",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "autogem.enable",
+        "title": "Enable AutoGem Autocompletion"
+      },
+      {
+        "command": "autogem.disable",
+        "title": "Disable AutoGem Autocompletion"
+      }
+    ],
+    "configuration": {
+      "title": "AutoGem Settings",
+      "properties": {
+        "autogem.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Google Gemini API key."
+        },
+        "autogem.model": {
+          "type": "string",
+          "default": "gemini-2.0-flash",
+          "description": "The Gemini AI model to use for autocompletion."
+        },
+        "autogem.enableOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AutoGem autocompletion automatically on startup."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.98.0",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.19.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0"
+  }
+}
