@@ -46,19 +46,20 @@ export function activate(context: vscode.ExtensionContext) {
           const language = document.languageId;
 
           // Build an enhanced prompt that adapts to the user's coding style.
-          const prompt = `You are an expert code assistant specializing in inline completions. Based on the following ${language} code snippet, generate a concise continuation that completes only the currently unfinished expression. Follow these rules:
-					Rules:
-					1. Output ONLY pure code—no explanations, comments, or non-code text.
-					2. Complete ONLY the currently unfinished statement/expression.
-					3. Analyze indentation patterns, variable naming conventions, and coding style to match the existing codebase.
-					4. Consider common patterns for the identified language and function context.
-					5. Limit output to 150 characters maximum.
-					6. If multiple completions are plausible, provide the most probable one based on context.
-					7. Respect established patterns in the codebase (e.g., if camelCase is used, continue with camelCase).
-					8. End the completion at a logical point (semicolon, closing bracket, etc.)
-					
-					Code context:
-					${contextText}`;
+          const prompt = `You are an expert code assistant specializing in inline code completions. Given the following ${language} snippet, generate a minimal continuation that completes only the currently unfinished expression.
+
+          Rules:
+          1. Output ONLY pure code—no explanations, comments, or extra text.
+          2. Complete ONLY the unfinished statement/expression; do not add any additional lines.
+          3. Match the existing indentation, naming conventions, and coding style.
+          4. Adhere to common patterns and syntax of ${language} within the given context.
+          5. Limit the output to a maximum of 150 characters.
+          6. If multiple completions are plausible, choose the most likely based on context.
+          7. End at a natural termination point (e.g., semicolon, closing bracket).
+          8. If the fragment is already complete, return nothing.
+          
+          Code context:
+          ${contextText}`;
 
           try {
             const modelName = config.get<string>("model") ?? "gemini-2.0-flash";
