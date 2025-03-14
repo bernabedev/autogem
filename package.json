@@ -24,9 +24,16 @@
     "vscode": "^1.98.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Machine Learning",
+    "Programming Languages"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onCommand:autogem.enable"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -56,6 +63,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable AutoGem autocompletion automatically on startup."
+        },
+        "autogem.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show AutoGem status bar indicator."
         }
       }
     }

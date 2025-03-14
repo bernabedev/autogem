@@ -58,7 +58,7 @@ export async function getCachedSuggestion(
   prompt: string,
   model: any,
   token: vscode.CancellationToken
-): Promise<string> {
+): Promise<string | string[]> {
   const key = getCacheKey(prompt);
   if (suggestionCache.has(key)) {
     return suggestionCache.get(key)!;
@@ -66,6 +66,10 @@ export async function getCachedSuggestion(
   const suggestion = await debouncedGenerateSuggestion(prompt, model, token);
   suggestionCache.set(key, suggestion);
   return suggestion;
+}
+
+export function clearSuggestionCache() {
+  suggestionCache.clear();
 }
 
 /**
